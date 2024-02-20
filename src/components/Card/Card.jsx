@@ -6,8 +6,10 @@ const questions = ["Question 1", "Question 2", "Question 3","Question 4", "Quest
  "Question 21","Question 22", "Question 23","Question 24", "Question 25", "Question 26","Question 27","Question 28","Question 29","Question 30"];
 
 export default function Card() {
-  const [cardStates, setCardStates] = useState([false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false]);
+  // const [cardStates, setCardStates] = useState([false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false]);
   const [selectedQuestion, setSelectedQuestion] = useState(null);
+  const [cardStates, setCardStates] = useState(Array(30).fill(false));
+  const columnTitles = ["Column 1", "Column 2", "Column 3"];
 
   const handleClick = (index) => {
     setCardStates((prevStates) => {
@@ -27,20 +29,25 @@ export default function Card() {
 
   return (
     <>
-      <div className='card'>
-        {/* <div className='main-container'> */}
-          {cardStates.map((isFlipped, index) => (
-            <div
-              key={index}
-              className={isFlipped ? 'container-card' : 'flipped-card'}
-              onClick={() => {
-                handleClick(index);
-              }}
-            >
-              {isFlipped ? questions[index] : `Click to reveal Question ${index + 1}`}
-            </div>
-          ))}
-        {/* </div> */}
+      <div className="card">
+        {Array.from({ length: 3 }, (_, columnIndex) => (
+          <div key={columnIndex} className="column">
+            <h3>{columnTitles[columnIndex]}</h3>
+            {Array.from({ length: 10 }, (_, cardIndex) => {
+              const index = columnIndex * 10 + cardIndex;
+              const isFlipped = cardStates[index];
+              return (
+                <div
+                  key={index}
+                  className={isFlipped ? 'container-card' : 'flipped-card'}
+                  onClick={() => handleClick(index)}
+                >
+                  {isFlipped ? questions[index] : `Click to reveal Question ${index + 1}`}
+                </div>
+              );
+            })}
+          </div>
+        ))}
       </div>
 
       {selectedQuestion !== null && (
